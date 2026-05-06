@@ -284,9 +284,15 @@
       const area = document.getElementById('cardsArea');
       area.innerHTML = '';
 
-      // 6개 모든 카테고리에서 하나씩 추출하여 총 6장 표시
-      CATEGORIES.forEach((cat, idx) => {
-        const item = cat.items[Math.floor(Math.random() * cat.items.length)];
+      // 1. 전체 6개 카테고리 중 3개를 무작위로 선택
+      // CATEGORIES 배열을 무작위로 섞은 뒤 앞의 3개만 잘라냅니다.
+      const selectedCats = [...CATEGORIES]
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 3);
+
+      // 2. 선택된 3개의 카테고리에 대해서만 카드를 생성
+      selectedCats.forEach((cat, idx) => {
+        const item = cat.items[Math.floor(Math.random() * cat.items.length)];[cite: 1]
         const wrap = document.createElement('div');
         wrap.className = 'card-wrap';
         wrap.innerHTML = `
