@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>캐릭터 카드 뽑기</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Black+Han+Sans&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card-bg: #1a1a2e;
+      --accent1: #e8c97a;
+      --accent2: #c96a8f;
+      --accent3: #6a9fc9;
+      --text: #f0ead6;
+      --muted: #6b6580;
+      --border: rgba(232, 201, 122, 0.18);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Serif KR', serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+    }
+
+    header h1 {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 3rem;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .draw-btn {
+      background: transparent;
+      border: 1.5px solid var(--accent1);
+      color: var(--accent1);
+      padding: 0.8rem 2.5rem;
+      font-family: 'Black Han Sans', sans-serif;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 3rem;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+    }
+
+    .draw-btn:hover {
+      background: var(--accent1);
+      color: var(--bg);
+    }
+
+    .cards-area {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .card-wrap {
+      perspective: 1000px;
+      width: 220px;
+      height: 350px;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      border-radius: 4px;
+    }
+
+    .card-back {
+      background: var(--card-bg);
+      align-items: center;
+      justify-content: center;
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 4rem;
+      color: var(--accent1);
+      opacity: 0.4;
+    }
+
+    .card-front {
+      transform: rotateY(180deg);
+      background: #12121a;
+    }
+
+    .cat-bar {
+      height: 8px;
+      width: 100%;
+    }
+
+    .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    /* 아이콘 크기 확대 섹션 */
+    .card-icon {
+      margin-bottom: 1.5rem;
+      /* 아이콘과 이름 사이 간격 증가 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.05));
+    }
+
+    .card-icon i {
+      width: 80px;
+      /* 기존 48px -> 80px */
+      height: 80px;
+      /* 기존 48px -> 80px */
+      stroke-width: 2px;
+      /* 선 굵기를 약간 두껍게 조정 */
+    }
+
+    .card-name {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      opacity: 0.5;
+      line-height: 1.6;
+    }
+
+    /* 카테고리별 테마색 */
+    .cat-0 {
+      color: var(--accent1);
+    }
+
+    .cat-0 .cat-bar {
+      background: var(--accent1);
+    }
+
+    .cat-1 {
+      color: var(--accent2);
+    }
+
+    .cat-1 .cat-bar {
+      background: var(--accent2);
+    }
+
+    .cat-2 {
+      color: var(--accent3);
+    }
+
+    .cat-2 .cat-bar {
+      background: var(--accent3);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>캐릭터 카드 뽑기</h1>
+  </header>
+
+  <button class="draw-btn" onclick="draw()">카드 뽑기</button>
+  <div class="cards-area" id="cardsArea"></div>
+
+  <script>
+    const CATEGORIES = [
+      {
+        name: "의상",
+        colorIdx: 0,
+        items: [
+          { name: "제복", desc: "규율과 질서의 상징", icon: "shirt" },
+          { name: "로브", desc: "신비한 마력이 깃든 옷", icon: "book-open" },
+          { name: "갑옷", desc: "강철로 된 전사의 의복", icon: "shield" }
+        ]
+      },
+      {
+        name: "전투",
+        colorIdx: 1,
+        items: [
+          { name: "검술", desc: "날카로운 검의 달인", icon: "sword" },
+          { name: "마법", desc: "고대의 주문을 외우는 자", icon: "wand-2" },
+          { name: "저격", desc: "백발백중의 명사수", icon: "target" }
+        ]
+      },
+      {
+        name: "성향",
+        colorIdx: 2,
+        items: [
+          { name: "다정한", desc: "모두를 감싸안는 마음", icon: "heart" },
+          { name: "냉철한", desc: "얼음처럼 차가운 이성", icon: "snowflake" },
+          { name: "유쾌한", desc: "즐거움을 전파하는 성격", icon: "laugh" }
+        ]
+      }
+    ];
+
+    function draw() {
+      const area = document.getElementById('cardsArea');
+      area.innerHTML = '';
+
+      CATEGORIES.forEach((cat, idx) => {
+        const item = cat.items[Math.floor(Math.random() * cat.items.length)];
+        const wrap = document.createElement('div');
+        wrap.className = 'card-wrap';
+        wrap.innerHTML = `
+      <div class="card-inner" id="ci${idx}">
+        <div class="card-face card-back">?</div>
+        <div class="card-face card-front cat-${cat.colorIdx}">
+          <div class="cat-bar"></div>
+          <div class="card-body">
+            <div class="card-icon">
+              <i data-lucide="${item.icon}"></i>
+            </div>
+            <div class="card-name">${item.name}</div>
+            <div class="card-desc">${item.desc}</div>
+          </div>
+        </div>
+      </div>
+    `;
+        area.appendChild(wrap);
+
+        setTimeout(() => {
+          const el = document.getElementById(`ci${idx}`);
+          if (el) el.classList.add('flipped');
+        }, 200 + (idx * 150));
+      });
+
+      // 아이콘 생성 실행
+      lucide.createIcons();
+    }
+  </script>
+</body>
+
+</html>
