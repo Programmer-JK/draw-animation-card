@@ -26,7 +26,6 @@
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
-      /* 모바일 터치 하이라이트 제거 */
     }
 
     body {
@@ -44,13 +43,12 @@
 
     header {
       text-align: center;
-      padding: 2rem 1rem 1.5rem;
+      padding: 1.5rem 1rem 1rem;
     }
 
     header h1 {
       font-family: 'Black Han Sans', sans-serif;
       font-size: 2.2rem;
-      /* 모바일 대응 크기 조절 */
       background: linear-gradient(135deg, var(--accent1), var(--accent2));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -58,52 +56,44 @@
     }
 
     header p {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      opacity: 0.7;
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-top: 5px;
     }
 
     .draw-btn {
       background: transparent;
       border: 1.5px solid var(--accent1);
       color: var(--accent1);
-      padding: 0.8rem 2rem;
+      padding: 0.7rem 2rem;
       font-family: 'Black Han Sans', sans-serif;
       cursor: pointer;
       transition: 0.3s;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       font-size: 1.1rem;
-      letter-spacing: 0.1em;
       border-radius: 4px;
     }
 
     .draw-btn:active {
-      /* 모바일 클릭 피드백 */
       background: var(--accent1);
       color: var(--bg);
-      transform: scale(0.95);
     }
 
     .cards-area {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
-      /* 카드간 간격 밀착 */
+      gap: 15px;
       width: 100%;
-      max-width: 650px;
-      /* 3장이 너무 벌어지지 않게 제한 */
+      max-width: 800px;
       padding-bottom: 4rem;
     }
 
+    /* 카드 기본 스타일 */
     .card-wrap {
       perspective: 1000px;
-      width: calc(33.333% - 12px);
-      /* 기본 3열 */
-      min-width: 100px;
-      /* 최소 너비 */
-      aspect-ratio: 180 / 280;
-      /* 카드 비율 고정 */
+      width: 180px;
+      height: 280px;
     }
 
     .card-inner {
@@ -123,7 +113,7 @@
       inset: 0;
       backface-visibility: hidden;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -138,7 +128,7 @@
 
     .card-back span {
       font-family: 'Black Han Sans', sans-serif;
-      font-size: 2.5rem;
+      font-size: 3.5rem;
       color: var(--accent1);
       opacity: 0.3;
     }
@@ -150,7 +140,7 @@
     }
 
     .cat-bar {
-      height: 5px;
+      height: 6px;
       width: 100%;
     }
 
@@ -160,127 +150,230 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 8px;
+      padding: 10px;
       text-align: center;
-    }
-
-    .card-category {
-      font-size: 0.6rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .card-icon {
-      margin-bottom: 6px;
-    }
-
-    .card-icon svg {
-      width: clamp(30px, 10vw, 40px);
-      /* 화면 크기에 따른 아이콘 크기 유동 조절 */
-      height: auto;
-      stroke: currentColor;
     }
 
     .card-name {
       font-family: 'Black Han Sans', sans-serif;
-      font-size: clamp(0.9rem, 4vw, 1.15rem);
-      /* 이름 크기 유동 조절 */
+      font-size: 1.2rem;
       margin-bottom: 4px;
-      word-break: keep-all;
     }
 
     .card-desc {
-      font-size: 0.65rem;
-      opacity: 0.6;
-      line-height: 1.2;
+      font-size: 0.7rem;
+      opacity: 0.7;
       word-break: keep-all;
     }
 
-    /* 카테고리별 테마색 */
-    .cat-0 {
+    /* 플로팅 버튼 (FAB) */
+    .fab {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: var(--accent1);
+      color: var(--bg);
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.6rem;
+    }
+
+    /* 도감 오버레이 */
+    .guide-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 10, 0.97);
+      backdrop-filter: blur(15px);
+      z-index: 200;
+      display: none;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .guide-overlay.active {
+      display: block;
+    }
+
+    .guide-content {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .guide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: transparent;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 30px;
+    }
+
+    .guide-header h2 {
+      font-family: 'Black Han Sans', sans-serif;
+      color: var(--accent1);
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 미니 카드 그리드 */
+    .guide-section {
+      margin-bottom: 50px;
+    }
+
+    .guide-section-title {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .guide-section-desc {
+      opacity: 0.5;
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+    }
+
+    .mini-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    .mini-card {
+      background: #12121a;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mini-card .m-cat-bar {
+      height: 4px;
+      width: 100%;
+      background: var(--accent-color);
+    }
+
+    .mini-card .m-body {
+      padding: 10px 5px;
+      text-align: center;
+    }
+
+    .mini-card .m-icon {
+      margin-bottom: 6px;
+      color: var(--accent-color);
+    }
+
+    .mini-card .m-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .mini-card .m-name {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 0.85rem;
+      margin-bottom: 3px;
+      color: #fff;
+    }
+
+    .mini-card .m-desc {
+      font-size: 0.6rem;
+      opacity: 0.5;
+      line-height: 1.1;
+    }
+
+    /* 색상 설정 */
+    .c-0 {
+      --accent-color: var(--accent1);
       color: var(--accent1);
     }
 
-    .cat-0 .cat-bar {
-      background: var(--accent1);
-    }
-
-    .cat-1 {
+    .c-1 {
+      --accent-color: var(--accent2);
       color: var(--accent2);
     }
 
-    .cat-1 .cat-bar {
-      background: var(--accent2);
-    }
-
-    .cat-2 {
+    .c-2 {
+      --accent-color: var(--accent3);
       color: var(--accent3);
     }
 
-    .cat-2 .cat-bar {
-      background: var(--accent3);
-    }
-
-    .cat-3 {
+    .c-3 {
+      --accent-color: var(--accent4);
       color: var(--accent4);
     }
 
-    .cat-3 .cat-bar {
-      background: var(--accent4);
-    }
-
-    .cat-4 {
+    .c-4 {
+      --accent-color: var(--accent5);
       color: var(--accent5);
     }
 
-    .cat-4 .cat-bar {
-      background: var(--accent5);
-    }
-
-    .cat-5 {
+    .c-5 {
+      --accent-color: var(--accent6);
       color: var(--accent6);
     }
 
-    .cat-5 .cat-bar {
-      background: var(--accent6);
-    }
-
-    /* 📱 모바일 최적화 미디어 쿼리 */
+    /* 📱 모바일 2,1 레이아웃 설정 */
     @media (max-width: 480px) {
       header h1 {
         font-size: 1.8rem;
       }
 
       .cards-area {
-        gap: 8px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        justify-items: center;
       }
 
+      /* 3번째 카드를 가운데로 (2열을 다 차지하게 함) */
+      .card-wrap:nth-child(3) {
+        grid-column: span 2;
+      }
+
+      /* 모바일에서 한 화면에 다 보이기 위해 카드 크기 축소 */
       .card-wrap {
-        width: calc(50% - 8px);
-        /* 모바일에서는 2열로 배치 */
+        width: 145px;
+        height: 220px;
       }
 
-      /* 3번째 카드는 중앙 배치를 위해 100% 혹은 자동 조절 */
-      .card-wrap:last-child:nth-child(odd) {
-        width: calc(50% - 8px);
-      }
-    }
-
-    @media (min-width: 600px) {
-      header h1 {
-        font-size: 2.8rem;
+      .card-name {
+        font-size: 1rem;
       }
 
-      .card-wrap {
-        width: 170px;
+      .card-desc {
+        font-size: 0.65rem;
       }
 
-      /* 태블릿 이상에서는 고정 크기 근접 */
-      .cards-area {
-        gap: 15px;
+      .mini-card-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
@@ -290,16 +383,29 @@
 
   <header>
     <h1>캐릭터 카드 뽑기</h1>
-    <p>3장의 카드로 조합하는 당신의 운명</p>
+    <p>3장의 카드로 당신의 운명을 완성하세요</p>
   </header>
 
   <button class="draw-btn" onclick="draw()">운명 뽑기</button>
-  <div class="cards-area" id="cardsArea"></div>
+
+  <main class="cards-area" id="cardsArea"></main>
+
+  <button class="fab" onclick="toggleGuide()">?</button>
+
+  <div class="guide-overlay" id="guideOverlay">
+    <div class="guide-content">
+      <div class="guide-header">
+        <h2>전체 카드 도감</h2>
+        <button class="close-btn" onclick="toggleGuide()"><i data-lucide="x"></i></button>
+      </div>
+      <div id="guideList"></div>
+    </div>
+  </div>
 
   <script>
     const CATEGORIES = [
       {
-        name: "의상", colorIdx: 0, items: [
+        name: "의상", desc: "캐릭터의 외형과 시대적 배경", colorIdx: 0, items: [
           { name: "교복", desc: "청춘의 상징", icon: "graduation-cap" }, { name: "갑옷", desc: "철벽 방어", icon: "shield" },
           { name: "정장", desc: "단정한 실루엣", icon: "briefcase" }, { name: "한복", desc: "전통의 미", icon: "flower" },
           { name: "코트", desc: "고독한 분위기", icon: "shirt" }, { name: "운동복", desc: "활동적인 에너지", icon: "dumbbell" },
@@ -308,7 +414,7 @@
         ]
       },
       {
-        name: "전투방식", colorIdx: 1, items: [
+        name: "전투방식", desc: "싸우는 스타일과 능력의 근원", colorIdx: 1, items: [
           { name: "검술", desc: "날카로운 베기", icon: "sword" }, { name: "격투", desc: "묵직한 타격", icon: "hand" },
           { name: "마법", desc: "신비한 영창", icon: "wand-2" }, { name: "저격", desc: "정밀한 사격", icon: "crosshair" },
           { name: "소환", desc: "강력한 부름", icon: "dog" }, { name: "암살", desc: "어둠 속 일격", icon: "moon" },
@@ -317,7 +423,7 @@
         ]
       },
       {
-        name: "장르", colorIdx: 2, items: [
+        name: "장르", desc: "세계관의 전체적인 분위기", colorIdx: 2, items: [
           { name: "액션", desc: "폭발적 긴장감", icon: "zap" }, { name: "스포츠", desc: "땀과 열정", icon: "trophy" },
           { name: "공포", desc: "서늘한 공포", icon: "ghost" }, { name: "코믹", desc: "유쾌한 웃음", icon: "laugh" },
           { name: "로맨스", desc: "달콤한 설렘", icon: "heart" }, { name: "추리", desc: "진실의 추적", icon: "search" },
@@ -326,7 +432,7 @@
         ]
       },
       {
-        name: "스타일", colorIdx: 3, items: [
+        name: "스타일", desc: "캐릭터의 직업이나 특별한 소질", colorIdx: 3, items: [
           { name: "시인", desc: "감성적 문장", icon: "feather" }, { name: "화가", desc: "색채의 마법", icon: "palette" },
           { name: "요리사", desc: "맛의 향연", icon: "utensils" }, { name: "의사", desc: "생명의 구원", icon: "stethoscope" },
           { name: "과학자", desc: "진리의 탐구", icon: "microscope" }, { name: "발명가", desc: "무한한 창조", icon: "lightbulb" },
@@ -335,16 +441,16 @@
         ]
       },
       {
-        name: "성격", colorIdx: 4, items: [
+        name: "성격", desc: "내면의 기질과 행동의 동기", colorIdx: 4, items: [
           { name: "소심한", desc: "수줍은 마음", icon: "cloud" }, { name: "다정한", desc: "따뜻한 시선", icon: "sun" },
           { name: "까칠한", desc: "날카로운 말", icon: "zap" }, { name: "낯가리는", desc: "조심스러운 태도", icon: "eye-off" },
-          { name: "장난꾸러기", desc: "즐거운 사고", icon: "party-popper" }, { name: "열정적인", desc: "뜨거운 에너지", icon: "flame" },
+          { name: "장난꾸러기", desc: "즐거운 사고", icon: "party-popper" }, { name: "열정적인", desc: "뜨거운 에너지", icon: "fire" },
           { name: "집착하는", desc: "강한 집념", icon: "link" }, { name: "로맨틱한", desc: "낭만적 무드", icon: "rose" },
           { name: "냉정한", desc: "차가운 판단", icon: "snowflake" }, { name: "츤데레", desc: "숨겨진 진심", icon: "smile" }
         ]
       },
       {
-        name: "특징", colorIdx: 5, items: [
+        name: "특징", desc: "외형적 포인트와 상징적 개성", colorIdx: 5, items: [
           { name: "안경", desc: "지적 매력", icon: "glasses" }, { name: "문신", desc: "강렬한 표식", icon: "pen-tool" },
           { name: "흉터", desc: "전투의 흔적", icon: "scissors" }, { name: "반창고", desc: "소소한 상처", icon: "bandage" },
           { name: "귀걸이", desc: "빛나는 장식", icon: "circle" }, { name: "목걸이", desc: "소중한 펜던트", icon: "gem" },
@@ -358,6 +464,7 @@
       const area = document.getElementById('cardsArea');
       area.innerHTML = '';
 
+      // 6개 중 3개 랜덤 선택
       const selectedCats = [...CATEGORIES]
         .sort(() => Math.random() - 0.5)
         .slice(0, 3);
@@ -369,11 +476,11 @@
         wrap.innerHTML = `
           <div class="card-inner" id="ci${idx}">
             <div class="card-face card-back"><span>?</span></div>
-            <div class="card-face card-front cat-${cat.colorIdx}">
-              <div class="cat-bar"></div>
+            <div class="card-face card-front" style="color:var(--accent${cat.colorIdx + 1})">
+              <div class="cat-bar" style="background:var(--accent${cat.colorIdx + 1})"></div>
               <div class="card-body">
-                <div class="card-category">${cat.name}</div>
-                <div class="card-icon"><i data-lucide="${item.icon}"></i></div>
+                <div style="font-size:0.65rem; opacity:0.6; margin-bottom:5px;">${cat.name}</div>
+                <div style="margin-bottom:8px;"><i data-lucide="${item.icon}"></i></div>
                 <div class="card-name">${item.name}</div>
                 <div class="card-desc">${item.desc}</div>
               </div>
@@ -381,15 +488,50 @@
           </div>
         `;
         area.appendChild(wrap);
-
+        // 뒤집기 애니메이션 시차
         setTimeout(() => {
           const el = document.getElementById(`ci${idx}`);
           if (el) el.classList.add('flipped');
-        }, 100 + (idx * 200));
+        }, 150 + (idx * 150));
       });
-
       lucide.createIcons();
     }
+
+    function toggleGuide() {
+      const overlay = document.getElementById('guideOverlay');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : 'auto';
+    }
+
+    function initGuide() {
+      const list = document.getElementById('guideList');
+      list.innerHTML = CATEGORIES.map((cat, cIdx) => `
+        <div class="guide-section c-${cIdx}">
+          <div class="guide-section-title">
+             <i data-lucide="sparkle" style="width:18px;"></i> ${cat.name}
+          </div>
+          <div class="guide-section-desc">${cat.desc}</div>
+          <div class="mini-card-grid">
+            ${cat.items.map(item => `
+              <div class="mini-card">
+                <div class="m-cat-bar"></div>
+                <div class="m-body">
+                  <div class="m-icon"><i data-lucide="${item.icon}"></i></div>
+                  <div class="m-name">${item.name}</div>
+                  <div class="m-desc">${item.desc}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.onload = () => {
+      initGuide();
+      draw();
+      lucide.createIcons();
+    };
   </script>
 </body>
 
