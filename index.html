@@ -16,53 +16,48 @@
       --accent1: #e8c97a;
       --accent2: #c96a8f;
       --accent3: #6a9fc9;
+      --accent4: #8fc96a;
+      --accent5: #c9906a;
+      --accent6: #a06ac9;
       --text: #f0ead6;
-      --muted: #6b6580;
       --border: rgba(232, 201, 122, 0.18);
-    }
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'Noto Serif KR', serif;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      overflow-x: hidden;
+      min-height: 100vh;
+      margin: 0;
     }
 
     header {
       text-align: center;
-      padding: 3rem 1rem 2rem;
+      padding: 2.5rem 1rem 1.5rem;
     }
 
     header h1 {
       font-family: 'Black Han Sans', sans-serif;
-      font-size: 3rem;
+      font-size: 2.8rem;
       background: linear-gradient(135deg, var(--accent1), var(--accent2));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin: 0;
     }
 
     .draw-btn {
       background: transparent;
       border: 1.5px solid var(--accent1);
       color: var(--accent1);
-      padding: 0.8rem 2.5rem;
+      padding: 0.9rem 2.5rem;
       font-family: 'Black Han Sans', sans-serif;
       cursor: pointer;
       transition: 0.3s;
-      margin-bottom: 3rem;
-      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      font-size: 1.15rem;
       letter-spacing: 0.1em;
     }
 
@@ -72,17 +67,19 @@
     }
 
     .cards-area {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      min-height: 400px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      width: 95%;
+      max-width: 1200px;
+      justify-items: center;
+      padding-bottom: 5rem;
     }
 
     .card-wrap {
       perspective: 1000px;
-      width: 220px;
-      height: 350px;
+      width: 180px;
+      height: 280px;
     }
 
     .card-inner {
@@ -90,7 +87,7 @@
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
-      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     .card-inner.flipped {
@@ -102,17 +99,21 @@
       inset: 0;
       backface-visibility: hidden;
       border: 1px solid var(--border);
+      border-radius: 10px;
       display: flex;
       flex-direction: column;
-      border-radius: 4px;
+      overflow: hidden;
     }
 
     .card-back {
       background: var(--card-bg);
       align-items: center;
       justify-content: center;
+    }
+
+    .card-back span {
       font-family: 'Black Han Sans', sans-serif;
-      font-size: 4rem;
+      font-size: 3rem;
       color: var(--accent1);
       opacity: 0.4;
     }
@@ -123,7 +124,7 @@
     }
 
     .cat-bar {
-      height: 8px;
+      height: 6px;
       width: 100%;
     }
 
@@ -133,39 +134,31 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem;
+      padding: 1rem;
       text-align: center;
     }
 
-    /* 아이콘 크기 확대 섹션 */
     .card-icon {
-      margin-bottom: 1.5rem;
-      /* 아이콘과 이름 사이 간격 증가 */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.05));
+      margin-bottom: 1rem;
     }
 
     .card-icon i {
-      width: 80px;
-      /* 기존 48px -> 80px */
-      height: 80px;
-      /* 기존 48px -> 80px */
-      stroke-width: 2px;
-      /* 선 굵기를 약간 두껍게 조정 */
+      width: 55px;
+      height: 55px;
+      stroke-width: 1.5px;
     }
 
     .card-name {
       font-family: 'Black Han Sans', sans-serif;
-      font-size: 1.8rem;
-      margin-bottom: 0.8rem;
+      font-size: 1.35rem;
+      margin-bottom: 0.4rem;
     }
 
     .card-desc {
-      font-size: 0.85rem;
-      opacity: 0.5;
-      line-height: 1.6;
+      font-size: 0.75rem;
+      opacity: 0.6;
+      line-height: 1.4;
+      word-break: keep-all;
     }
 
     /* 카테고리별 테마색 */
@@ -192,6 +185,30 @@
     .cat-2 .cat-bar {
       background: var(--accent3);
     }
+
+    .cat-3 {
+      color: var(--accent4);
+    }
+
+    .cat-3 .cat-bar {
+      background: var(--accent4);
+    }
+
+    .cat-4 {
+      color: var(--accent5);
+    }
+
+    .cat-4 .cat-bar {
+      background: var(--accent5);
+    }
+
+    .cat-5 {
+      color: var(--accent6);
+    }
+
+    .cat-5 .cat-bar {
+      background: var(--accent6);
+    }
   </style>
 </head>
 
@@ -199,38 +216,66 @@
 
   <header>
     <h1>캐릭터 카드 뽑기</h1>
+    <p style="margin-top:0.5rem; opacity:0.7">6가지 카테고리, 60장의 조합</p>
   </header>
 
-  <button class="draw-btn" onclick="draw()">카드 뽑기</button>
+  <button class="draw-btn" onclick="draw()">운명 뽑기</button>
   <div class="cards-area" id="cardsArea"></div>
 
   <script>
     const CATEGORIES = [
       {
-        name: "의상",
-        colorIdx: 0,
-        items: [
-          { name: "제복", desc: "규율과 질서의 상징", icon: "shirt" },
-          { name: "로브", desc: "신비한 마력이 깃든 옷", icon: "book-open" },
-          { name: "갑옷", desc: "강철로 된 전사의 의복", icon: "shield" }
+        name: "의상", colorIdx: 0, items: [
+          { name: "교복", desc: "청춘의 상징", icon: "graduation-cap" }, { name: "갑옷", desc: "철벽 방어", icon: "shield" },
+          { name: "정장", desc: "단정한 실루엣", icon: "user-tie" }, { name: "한복", desc: "전통의 미", icon: "fan" },
+          { name: "코트", desc: "고독한 분위기", icon: "shirt" }, { name: "운동복", desc: "활동적인 에너지", icon: "dumbbell" },
+          { name: "수영복", desc: "여름의 추억", icon: "waves" }, { name: "로브", desc: "신비로운 마력", icon: "venetian-mask" },
+          { name: "드레스", desc: "화려한 우아함", icon: "sparkles" }, { name: "제복", desc: "규율과 질서", icon: "armchair" }
         ]
       },
       {
-        name: "전투",
-        colorIdx: 1,
-        items: [
-          { name: "검술", desc: "날카로운 검의 달인", icon: "sword" },
-          { name: "마법", desc: "고대의 주문을 외우는 자", icon: "wand-2" },
-          { name: "저격", desc: "백발백중의 명사수", icon: "target" }
+        name: "전투방식", colorIdx: 1, items: [
+          { name: "검술", desc: "날카로운 베기", icon: "sword" }, { name: "격투", desc: "묵직한 타격", icon: "fist" },
+          { name: "마법", desc: "신비한 영창", icon: "wand-2" }, { name: "저격", desc: "정밀한 사격", icon: "target" },
+          { name: "소환", desc: "강력한 부름", icon: "cat" }, { name: "암살", desc: "어둠 속 일격", icon: "ghost" },
+          { name: "방어형", desc: "철벽의 가드", icon: "shield-alert" }, { name: "치유형", desc: "빛의 회복", icon: "plus-circle" },
+          { name: "독술", desc: "치명적인 한 방", icon: "skull" }, { name: "기계병기", desc: "압도적 화력", icon: "bot" }
         ]
       },
       {
-        name: "성향",
-        colorIdx: 2,
-        items: [
-          { name: "다정한", desc: "모두를 감싸안는 마음", icon: "heart" },
-          { name: "냉철한", desc: "얼음처럼 차가운 이성", icon: "snowflake" },
-          { name: "유쾌한", desc: "즐거움을 전파하는 성격", icon: "laugh" }
+        name: "장르", colorIdx: 2, items: [
+          { name: "액션", desc: "폭발적 긴장감", icon: "flame" }, { name: "스포츠", desc: "땀과 열정", icon: "trophy" },
+          { name: "공포", desc: "서늘한 공포", icon: "ghost" }, { name: "코믹", desc: "유쾌한 웃음", icon: "laugh" },
+          { name: "로맨스", desc: "달콤한 설렘", icon: "heart" }, { name: "추리", desc: "진실의 추적", icon: "search" },
+          { name: "판타지", desc: "꿈의 모험", icon: "mountain" }, { name: "일상", desc: "소소한 행복", icon: "coffee" },
+          { name: "SF", desc: "미래의 상상", icon: "rocket" }, { name: "시대극", desc: "역사의 한 장면", icon: "scroll" }
+        ]
+      },
+      {
+        name: "스타일", colorIdx: 3, items: [
+          { name: "시인", desc: "감성적 문장", icon: "feather" }, { name: "화가", desc: "색채의 마법", icon: "palette" },
+          { name: "요리사", desc: "맛의 향연", icon: "utensils" }, { name: "의사", desc: "생명의 구원", icon: "stethoscope" },
+          { name: "과학자", desc: "진리의 탐구", icon: "microscope" }, { name: "발명가", desc: "무한한 창조", icon: "lightbulb" },
+          { name: "아이돌", desc: "무대의 중심", icon: "mic-2" }, { name: "탐정", desc: "날카로운 눈초리", icon: "glasses" },
+          { name: "음악가", desc: "영혼의 울림", icon: "music" }, { name: "기사", desc: "명예의 수호", icon: "shield-check" }
+        ]
+      },
+      {
+        name: "성격", colorIdx: 4, items: [
+          { name: "소심한", desc: "수줍은 마음", icon: "cloud" }, { name: "다정한", desc: "따뜻한 시선", icon: "sun" },
+          { name: "까칠한", desc: "날카로운 말", icon: "zap" }, { name: "낯가리는", desc: "조심스러운 태도", icon: "eye-off" },
+          { name: "장난꾸러기", desc: "즐거운 사고", icon: "party-popper" }, { name: "열정적인", desc: "뜨거운 에너지", icon: "fire" },
+          { name: "집착하는", desc: "강한 집념", icon: "link" }, { name: "로맨틱한", desc: "낭만적 무드", icon: "rose" },
+          { name: "냉정한", desc: "차가운 판단", icon: "snowflake" }, { name: "츤데레", desc: "숨겨진 진심", icon: "smile" }
+        ]
+      },
+      {
+        name: "특징", colorIdx: 5, items: [
+          { name: "안경", desc: "지적 매력", icon: "glasses" }, { name: "문신", desc: "강렬한 표식", icon: "brush" },
+          { name: "흉터", desc: "전투의 흔적", icon: "scissors" }, { name: "반창고", desc: "소소한 상처", icon: "sticker" },
+          { name: "귀걸이", desc: "빛나는 장식", icon: "disc" }, { name: "목걸이", desc: "소중한 펜던트", icon: "gem" },
+          { name: "피어싱", desc: "개성적 감각", icon: "disc" }, { name: "가면", desc: "숨겨진 얼굴", icon: "mask" },
+          { name: "이색 눈동자", desc: "신비로운 눈", icon: "eye" }, { name: "의수/의족", desc: "강철의 의지", icon: "accessibility" }
         ]
       }
     ];
@@ -239,19 +284,18 @@
       const area = document.getElementById('cardsArea');
       area.innerHTML = '';
 
+      // 6개 모든 카테고리에서 하나씩 추출하여 총 6장 표시
       CATEGORIES.forEach((cat, idx) => {
         const item = cat.items[Math.floor(Math.random() * cat.items.length)];
         const wrap = document.createElement('div');
         wrap.className = 'card-wrap';
         wrap.innerHTML = `
       <div class="card-inner" id="ci${idx}">
-        <div class="card-face card-back">?</div>
+        <div class="card-face card-back"><span>?</span></div>
         <div class="card-face card-front cat-${cat.colorIdx}">
           <div class="cat-bar"></div>
           <div class="card-body">
-            <div class="card-icon">
-              <i data-lucide="${item.icon}"></i>
-            </div>
+            <div class="card-icon"><i data-lucide="${item.icon}"></i></div>
             <div class="card-name">${item.name}</div>
             <div class="card-desc">${item.desc}</div>
           </div>
@@ -260,13 +304,14 @@
     `;
         area.appendChild(wrap);
 
+        // 플립 애니메이션 타이밍 조절
         setTimeout(() => {
           const el = document.getElementById(`ci${idx}`);
           if (el) el.classList.add('flipped');
-        }, 200 + (idx * 150));
+        }, 150 + (idx * 120));
       });
 
-      // 아이콘 생성 실행
+      // 아이콘 렌더링
       lucide.createIcons();
     }
   </script>
