@@ -637,7 +637,7 @@
           { name: "흑발", desc: "신비로운 매력", icon: "droplet" }, { name: "금발", desc: "눈부신 빛깔", icon: "sparkle" },
           { name: "흰 머리카락", desc: "초월적 분위기", icon: "circle" }, { name: "붉은 눈", desc: "강렬한 시선", icon: "eye" },
           { name: "트윈테일", desc: "생기 넘치는 활기", icon: "git-fork" }, { name: "짧은 머리", desc: "시원한 인상", icon: "arrow-up" },
-          { name: "긴 머리", desc: "우아하게 흐르는", icon: "arrow-down" }
+          { name: "긴 생 머리", desc: "우아하게 흐르는", icon: "arrow-down" }
         ]
       },
       {
@@ -678,9 +678,13 @@
       activeGenres = new Set(CATEGORIES.map((_, i) => i));
     }
 
-    function nextItem(deckEntry) {
+    function nextItem(deckEntry, usedNames) {
       if (infiniteActive) {
-        return deckEntry.cat.items[Math.floor(Math.random() * deckEntry.cat.items.length)];
+        const pool = usedNames
+          ? deckEntry.cat.items.filter(i => !usedNames.has(i.name))
+          : deckEntry.cat.items;
+        const src = pool.length > 0 ? pool : deckEntry.cat.items;
+        return src[Math.floor(Math.random() * src.length)];
       }
       if (deckEntry.remaining.length === 0) {
         deckEntry.remaining = [...deckEntry.cat.items].sort(() => Math.random() - 0.5);
@@ -736,12 +740,15 @@
     function pickRandom6() {
       const catCounts = new Map();
       const results = [];
+      const usedNames = new Set();
       while (results.length < 6) {
         const available = catDecks.filter((_, i) => (catCounts.get(i) || 0) < 3);
         if (available.length === 0) break;
         const deckEntry = available[Math.floor(Math.random() * available.length)];
         const catIdx = catDecks.indexOf(deckEntry);
-        results.push({ cat: deckEntry.cat, item: nextItem(deckEntry), deckEntry });
+        const item = nextItem(deckEntry, usedNames);
+        usedNames.add(item.name);
+        results.push({ cat: deckEntry.cat, item, deckEntry });
         catCounts.set(catIdx, (catCounts.get(catIdx) || 0) + 1);
       }
       return results;
@@ -774,7 +781,7 @@
       return wrap;
     }
 
-function draw() {
+    function draw() {
       if (!catDecks) buildDecks();
 
       const area = document.getElementById('cardsArea');
