@@ -5,8 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>캐릭터 카드 뽑기</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Black+Han+Sans&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Black+Han+Sans&display=swap"
     rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
@@ -31,7 +30,8 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Noto Serif KR', serif;
+      /* 기본 폰트를 Sans KR로 변경하여 가독성 향상 */
+      font-family: 'Noto Sans KR', sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -57,8 +57,10 @@
 
     header p {
       font-size: 0.85rem;
-      opacity: 0.6;
+      opacity: 0.8;
       margin-top: 5px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
     }
 
     .draw-btn {
@@ -89,7 +91,7 @@
       padding-bottom: 4rem;
     }
 
-    /* 카드 기본 스타일 */
+    /* 카드 스타일 */
     .card-wrap {
       perspective: 1000px;
       width: 180px;
@@ -154,19 +156,35 @@
       text-align: center;
     }
 
-    .card-name {
-      font-family: 'Black Han Sans', sans-serif;
-      font-size: 1.2rem;
-      margin-bottom: 4px;
+    .card-cat-name {
+      font-size: 0.65rem;
+      opacity: 0.8;
+      margin-bottom: 5px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
     }
 
+    .card-name {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    /* 얇고 선명하게 수정한 설명 폰트 */
     .card-desc {
-      font-size: 0.7rem;
-      opacity: 0.7;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.72rem;
+      opacity: 0.9;
+      font-weight: 300;
+      /* 두께를 얇게 조절 */
+      line-height: 1.4;
+      letter-spacing: -0.01em;
       word-break: keep-all;
     }
 
-    /* 플로팅 버튼 (FAB) */
+    /* 플로팅 버튼 */
     .fab {
       position: fixed;
       right: 20px;
@@ -191,7 +209,7 @@
     .guide-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(5, 5, 10, 0.97);
+      background: rgba(5, 5, 10, 0.98);
       backdrop-filter: blur(15px);
       z-index: 200;
       display: none;
@@ -240,7 +258,6 @@
       justify-content: center;
     }
 
-    /* 미니 카드 그리드 */
     .guide-section {
       margin-bottom: 50px;
     }
@@ -255,9 +272,10 @@
     }
 
     .guide-section-desc {
-      opacity: 0.5;
-      font-size: 0.8rem;
+      opacity: 0.8;
+      font-size: 0.85rem;
       margin-bottom: 20px;
+      font-weight: 300;
     }
 
     .mini-card-grid {
@@ -299,17 +317,18 @@
     .mini-card .m-name {
       font-family: 'Black Han Sans', sans-serif;
       font-size: 0.85rem;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
       color: #fff;
     }
 
     .mini-card .m-desc {
-      font-size: 0.6rem;
-      opacity: 0.5;
-      line-height: 1.1;
+      font-size: 0.65rem;
+      opacity: 0.9;
+      font-weight: 300;
+      line-height: 1.2;
     }
 
-    /* 색상 설정 */
+    /* 색상 테마 */
     .c-0 {
       --accent-color: var(--accent1);
       color: var(--accent1);
@@ -340,7 +359,121 @@
       color: var(--accent6);
     }
 
-    /* 📱 모바일 2,1 레이아웃 설정 */
+    /* 모드 탭 */
+    .mode-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .mode-tab {
+      background: transparent;
+      border: 1px solid rgba(232, 201, 122, 0.25);
+      color: rgba(240, 234, 214, 0.4);
+      padding: 0.38rem 1.1rem;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: 0.2s;
+    }
+
+    .mode-tab.active {
+      border-color: var(--accent1);
+      color: var(--accent1);
+      background: rgba(232, 201, 122, 0.08);
+    }
+
+    /* 장르 선택 */
+    .genre-selector {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      max-width: 600px;
+      margin-bottom: 14px;
+    }
+
+    .genre-chip {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: rgba(240, 234, 214, 0.4);
+      padding: 0.3rem 0.9rem;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: 0.2s;
+    }
+
+    /* 드래프트 바 */
+    .draft-bar {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      min-height: 36px;
+    }
+
+    #draftCount {
+      font-size: 0.85rem;
+      opacity: 0.65;
+    }
+
+    .confirm-btn {
+      display: none;
+      background: transparent;
+      border: 1.5px solid var(--accent2);
+      color: var(--accent2);
+      padding: 0.38rem 1.2rem;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: 0.2s;
+    }
+
+    .confirm-btn:active {
+      background: var(--accent2);
+      color: var(--bg);
+    }
+
+    /* 드래프트 카드 선택 상태 */
+    .draft-card {
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.35s;
+    }
+
+    .draft-card.draft-selected .card-inner {
+      box-shadow: 0 0 0 2.5px var(--accent1), 0 0 18px rgba(232, 201, 122, 0.25);
+      border-radius: 12px;
+    }
+
+    .draft-card.draft-dismissed {
+      opacity: 0;
+      transform: scale(0.88);
+      pointer-events: none;
+    }
+
+    /* 카드 카운터 */
+    .card-counter {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.72rem;
+      opacity: 0.4;
+      background: rgba(10, 10, 15, 0.85);
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      z-index: 50;
+      pointer-events: none;
+      letter-spacing: 0.02em;
+    }
+
+    /* 모바일 2,1 배치 */
     @media (max-width: 480px) {
       header h1 {
         font-size: 1.8rem;
@@ -353,23 +486,39 @@
         justify-items: center;
       }
 
-      /* 3번째 카드를 가운데로 (2열을 다 차지하게 함) */
-      .card-wrap:nth-child(3) {
+      .cards-area:not(.mode-draft) .card-wrap:nth-child(3) {
         grid-column: span 2;
       }
 
-      /* 모바일에서 한 화면에 다 보이기 위해 카드 크기 축소 */
       .card-wrap {
         width: 145px;
-        height: 220px;
+        height: 225px;
       }
 
       .card-name {
-        font-size: 1rem;
+        font-size: 1.1rem;
       }
 
       .card-desc {
-        font-size: 0.65rem;
+        font-size: 0.68rem;
+      }
+
+      /* 드래프트: 3열 그리드 */
+      .mode-draft {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .mode-draft .card-wrap {
+        width: 100%;
+        height: 155px;
+      }
+
+      .mode-draft .card-name {
+        font-size: 0.9rem;
+      }
+
+      .mode-draft .card-desc {
+        font-size: 0.6rem;
       }
 
       .mini-card-grid {
@@ -386,9 +535,26 @@
     <p>3장의 카드로 당신의 운명을 완성하세요</p>
   </header>
 
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="basic" onclick="setMode('basic')">기본</button>
+    <button class="mode-tab" data-mode="draft" onclick="setMode('draft')">드래프트</button>
+    <button class="mode-tab" data-mode="random" onclick="setMode('random')">랜덤 6장</button>
+    <button class="mode-tab" data-mode="random-draft" onclick="setMode('random-draft')">랜덤 드래프트</button>
+    <button class="mode-tab" data-mode="genre" onclick="setMode('genre')">장르</button>
+    <button class="mode-tab" data-mode="infinite" onclick="setMode('infinite')">무한</button>
+  </div>
+
+  <div class="genre-selector" id="genreSelector"></div>
+
+  <div class="draft-bar" id="draftBar">
+    <span id="draftCount"></span>
+    <button class="confirm-btn" id="draftConfirm" onclick="confirmDraft()">선택 확정</button>
+  </div>
+
   <button class="draw-btn" onclick="draw()">운명 뽑기</button>
 
   <main class="cards-area" id="cardsArea"></main>
+  <div class="card-counter" id="cardCounter"></div>
 
   <button class="fab" onclick="toggleGuide()">?</button>
 
@@ -407,19 +573,21 @@
       {
         name: "의상", desc: "캐릭터의 외형과 시대적 배경", colorIdx: 0, items: [
           { name: "교복", desc: "청춘의 상징", icon: "graduation-cap" }, { name: "갑옷", desc: "철벽 방어", icon: "shield" },
-          { name: "정장", desc: "단정한 실루엣", icon: "briefcase" }, { name: "한복", desc: "전통의 미", icon: "flower" },
+          { name: "정장", desc: "단정한 실루엣", icon: "briefcase" },
           { name: "코트", desc: "고독한 분위기", icon: "shirt" }, { name: "운동복", desc: "활동적인 에너지", icon: "dumbbell" },
           { name: "수영복", desc: "여름의 추억", icon: "droplets" }, { name: "로브", desc: "신비로운 마력", icon: "sparkles" },
-          { name: "드레스", desc: "화려한 우아함", icon: "star" }, { name: "제복", desc: "규율과 질서", icon: "award" }
+          { name: "드레스", desc: "화려한 우아함", icon: "star" }, { name: "제복", desc: "규율과 질서", icon: "award" },
+          { name: "모자", desc: "트레이드마크", icon: "hat" }, { name: "전신슈트", desc: "완벽한 밀착감", icon: "scan" }
         ]
       },
       {
         name: "전투방식", desc: "싸우는 스타일과 능력의 근원", colorIdx: 1, items: [
           { name: "검술", desc: "날카로운 베기", icon: "sword" }, { name: "격투", desc: "묵직한 타격", icon: "hand" },
-          { name: "마법", desc: "신비한 영창", icon: "wand-2" }, { name: "저격", desc: "정밀한 사격", icon: "crosshair" },
-          { name: "소환", desc: "강력한 부름", icon: "dog" }, { name: "암살", desc: "어둠 속 일격", icon: "moon" },
-          { name: "방어형", desc: "철벽의 가드", icon: "shield-alert" }, { name: "치유형", desc: "빛의 회복", icon: "heart-pulse" },
-          { name: "독술", desc: "치명적인 한 방", icon: "skull" }, { name: "기계병기", desc: "압도적 화력", icon: "bot" }
+          { name: "마법", desc: "신비한 영창", icon: "wand-2" }, { name: "소환", desc: "강력한 부름", icon: "dog" },
+          { name: "암살", desc: "어둠 속 일격", icon: "moon" }, { name: "방어형", desc: "철벽의 가드", icon: "shield-alert" },
+          { name: "치유형", desc: "빛의 회복", icon: "heart-pulse" }, { name: "기계병기", desc: "압도적 화력", icon: "bot" },
+          { name: "신체변형", desc: "극한의 변화", icon: "dna" }, { name: "무기", desc: "강철의 힘", icon: "axe" },
+          { name: "화기", desc: "폭발적 화력", icon: "target" }
         ]
       },
       {
@@ -428,73 +596,279 @@
           { name: "공포", desc: "서늘한 공포", icon: "ghost" }, { name: "코믹", desc: "유쾌한 웃음", icon: "laugh" },
           { name: "로맨스", desc: "달콤한 설렘", icon: "heart" }, { name: "추리", desc: "진실의 추적", icon: "search" },
           { name: "판타지", desc: "꿈의 모험", icon: "mountain" }, { name: "일상", desc: "소소한 행복", icon: "coffee" },
-          { name: "SF", desc: "미래의 상상", icon: "rocket" }, { name: "시대극", desc: "역사의 한 장면", icon: "scroll" }
+          { name: "SF", desc: "미래의 상상", icon: "rocket" }, { name: "시대극", desc: "역사의 한 장면", icon: "scroll" },
+          { name: "학원물", desc: "청춘의 이야기", icon: "book-open" }, { name: "이세계", desc: "또 다른 세계로", icon: "globe" }
         ]
       },
       {
-        name: "스타일", desc: "캐릭터의 직업이나 특별한 소질", colorIdx: 3, items: [
-          { name: "시인", desc: "감성적 문장", icon: "feather" }, { name: "화가", desc: "색채의 마법", icon: "palette" },
-          { name: "요리사", desc: "맛의 향연", icon: "utensils" }, { name: "의사", desc: "생명의 구원", icon: "stethoscope" },
-          { name: "과학자", desc: "진리의 탐구", icon: "microscope" }, { name: "발명가", desc: "무한한 창조", icon: "lightbulb" },
-          { name: "아이돌", desc: "무대의 중심", icon: "mic-2" }, { name: "탐정", desc: "날카로운 눈초리", icon: "glasses" },
-          { name: "음악가", desc: "영혼의 울림", icon: "music" }, { name: "기사", desc: "명예의 수호", icon: "shield-check" }
+        name: "스타일", desc: "외모와 신체적 특성", colorIdx: 3, items: [
+          { name: "큰 체형", desc: "압도적 존재감", icon: "maximize-2" }, { name: "작은 체형", desc: "앙증맞은 귀여움", icon: "minimize-2" },
+          { name: "흑발", desc: "신비로운 매력", icon: "droplet" }, { name: "금발", desc: "눈부신 빛깔", icon: "sparkle" },
+          { name: "흰 머리카락", desc: "초월적 분위기", icon: "circle" }, { name: "붉은 눈", desc: "강렬한 시선", icon: "eye" },
+          { name: "트윈테일", desc: "생기 넘치는 활기", icon: "git-fork" }, { name: "짧은 머리", desc: "시원한 인상", icon: "arrow-up" },
+          { name: "긴 머리", desc: "우아하게 흐르는", icon: "arrow-down" }
         ]
       },
       {
         name: "성격", desc: "내면의 기질과 행동의 동기", colorIdx: 4, items: [
           { name: "소심한", desc: "수줍은 마음", icon: "cloud" }, { name: "다정한", desc: "따뜻한 시선", icon: "sun" },
           { name: "까칠한", desc: "날카로운 말", icon: "zap" }, { name: "낯가리는", desc: "조심스러운 태도", icon: "eye-off" },
-          { name: "장난꾸러기", desc: "즐거운 사고", icon: "party-popper" }, { name: "열정적인", desc: "뜨거운 에너지", icon: "fire" },
+          { name: "장난꾸러기", desc: "즐거운 사고", icon: "party-popper" },
           { name: "집착하는", desc: "강한 집념", icon: "link" }, { name: "로맨틱한", desc: "낭만적 무드", icon: "rose" },
-          { name: "냉정한", desc: "차가운 판단", icon: "snowflake" }, { name: "츤데레", desc: "숨겨진 진심", icon: "smile" }
+          { name: "냉정한", desc: "차가운 판단", icon: "snowflake" }, { name: "츤데레", desc: "숨겨진 진심", icon: "smile" },
+          { name: "열혈", desc: "뜨거운 열정", icon: "activity" }, { name: "상냥한", desc: "따스한 배려", icon: "heart-handshake" },
+          { name: "냉혈한", desc: "차가운 이성", icon: "thermometer" }, { name: "사차원", desc: "독특한 세계관", icon: "shuffle" }
         ]
       },
       {
         name: "특징", desc: "외형적 포인트와 상징적 개성", colorIdx: 5, items: [
           { name: "안경", desc: "지적 매력", icon: "glasses" }, { name: "문신", desc: "강렬한 표식", icon: "pen-tool" },
-          { name: "흉터", desc: "전투의 흔적", icon: "scissors" }, { name: "반창고", desc: "소소한 상처", icon: "bandage" },
-          { name: "귀걸이", desc: "빛나는 장식", icon: "circle" }, { name: "목걸이", desc: "소중한 펜던트", icon: "gem" },
-          { name: "피어싱", desc: "개성적 감각", icon: "disc" }, { name: "가면", desc: "숨겨진 얼굴", icon: "mask" },
-          { name: "이색 눈동자", desc: "신비로운 눈", icon: "eye" }, { name: "의수/의족", desc: "강철의 의지", icon: "armchair" }
+          { name: "흉터", desc: "전투의 흔적", icon: "scissors" },
+          { name: "장신구", desc: "빛나는 개성", icon: "gem" }, { name: "가면", desc: "숨겨진 얼굴", icon: "mask" },
+          { name: "이색 눈동자", desc: "신비로운 눈", icon: "eye" }, { name: "의수/의족", desc: "강철의 의지", icon: "armchair" },
+          { name: "남성", desc: "남성적 외형", icon: "mars" }, { name: "여성", desc: "여성적 외형", icon: "venus" },
+          { name: "노출", desc: "대담한 패션", icon: "wind" }, { name: "근육질", desc: "다져진 몸", icon: "dumbbell" },
+          { name: "이종족", desc: "인간을 넘은 존재", icon: "paw-print" }, { name: "수염", desc: "남성미의 상징", icon: "align-justify" }
         ]
       }
     ];
 
-    function draw() {
-      const area = document.getElementById('cardsArea');
-      area.innerHTML = '';
+    let catDecks = null;
+    let currentMode = 'basic';
+    let activeGenres = new Set();
+    let draftState = { selected: new Set() };
+    let infiniteTimer = null;
 
-      // 6개 중 3개 랜덤 선택
-      const selectedCats = [...CATEGORIES]
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 3);
+    function buildDecks() {
+      catDecks = CATEGORIES.map(cat => ({
+        cat,
+        remaining: [...cat.items].sort(() => Math.random() - 0.5)
+      }));
+      activeGenres = new Set(CATEGORIES.map((_, i) => i));
+    }
 
-      selectedCats.forEach((cat, idx) => {
-        const item = cat.items[Math.floor(Math.random() * cat.items.length)];
-        const wrap = document.createElement('div');
-        wrap.className = 'card-wrap';
-        wrap.innerHTML = `
-          <div class="card-inner" id="ci${idx}">
-            <div class="card-face card-back"><span>?</span></div>
-            <div class="card-face card-front" style="color:var(--accent${cat.colorIdx + 1})">
-              <div class="cat-bar" style="background:var(--accent${cat.colorIdx + 1})"></div>
-              <div class="card-body">
-                <div style="font-size:0.65rem; opacity:0.6; margin-bottom:5px;">${cat.name}</div>
-                <div style="margin-bottom:8px;"><i data-lucide="${item.icon}"></i></div>
-                <div class="card-name">${item.name}</div>
-                <div class="card-desc">${item.desc}</div>
-              </div>
+    function nextItem(deckEntry) {
+      if (deckEntry.remaining.length === 0) {
+        deckEntry.remaining = [...deckEntry.cat.items].sort(() => Math.random() - 0.5);
+      }
+      return deckEntry.remaining.pop();
+    }
+
+    function updateCounter() {
+      const el = document.getElementById('cardCounter');
+      if (!el || !catDecks) return;
+      const rem = catDecks.reduce((s, d) => s + d.remaining.length, 0);
+      const total = CATEGORIES.reduce((s, c) => s + c.items.length, 0);
+      el.textContent = `남은 카드  ${rem} / ${total}`;
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`.mode-tab[data-mode="${mode}"]`).classList.add('active');
+      document.getElementById('genreSelector').style.display = mode === 'genre' ? 'flex' : 'none';
+      document.getElementById('draftBar').style.display = (mode === 'draft' || mode === 'random-draft') ? 'flex' : 'none';
+      if (infiniteTimer) { clearInterval(infiniteTimer); infiniteTimer = null; }
+      draw();
+    }
+
+    function initGenreSelector() {
+      const el = document.getElementById('genreSelector');
+      el.innerHTML = CATEGORIES.map((cat, idx) =>
+        `<button class="genre-chip" data-idx="${idx}" onclick="toggleGenre(${idx})">${cat.name}</button>`
+      ).join('');
+      CATEGORIES.forEach((_, idx) => updateGenreChip(idx));
+    }
+
+    function updateGenreChip(idx) {
+      const chip = document.querySelector(`.genre-chip[data-idx="${idx}"]`);
+      if (!chip) return;
+      const isActive = activeGenres.has(idx);
+      const colorVar = `var(--accent${CATEGORIES[idx].colorIdx + 1})`;
+      chip.style.borderColor = isActive ? colorVar : 'rgba(255,255,255,0.15)';
+      chip.style.color = isActive ? colorVar : 'rgba(240,234,214,0.4)';
+      chip.style.background = isActive ? 'rgba(255,255,255,0.05)' : 'transparent';
+    }
+
+    function toggleGenre(idx) {
+      if (activeGenres.has(idx)) {
+        if (activeGenres.size <= 3) return;
+        activeGenres.delete(idx);
+      } else {
+        activeGenres.add(idx);
+      }
+      updateGenreChip(idx);
+    }
+
+    function pickRandom6() {
+      const catCounts = new Map();
+      const results = [];
+      while (results.length < 6) {
+        const available = catDecks.filter((_, i) => (catCounts.get(i) || 0) < 3);
+        if (available.length === 0) break;
+        const deckEntry = available[Math.floor(Math.random() * available.length)];
+        const catIdx = catDecks.indexOf(deckEntry);
+        results.push({ cat: deckEntry.cat, item: nextItem(deckEntry), deckEntry });
+        catCounts.set(catIdx, (catCounts.get(catIdx) || 0) + 1);
+      }
+      return results;
+    }
+
+    function pickDecks(count) {
+      const pool = currentMode === 'genre'
+        ? catDecks.filter((_, i) => activeGenres.has(i))
+        : catDecks;
+      return [...pool].sort(() => Math.random() - 0.5).slice(0, count);
+    }
+
+    function makeCardWrap(cat, item, idx) {
+      const wrap = document.createElement('div');
+      wrap.className = 'card-wrap';
+      wrap.innerHTML = `
+        <div class="card-inner" id="ci${idx}">
+          <div class="card-face card-back"><span>?</span></div>
+          <div class="card-face card-front" style="color:var(--accent${cat.colorIdx + 1})">
+            <div class="cat-bar" style="background:var(--accent${cat.colorIdx + 1})"></div>
+            <div class="card-body">
+              <div class="card-cat-name">${cat.name}</div>
+              <div style="margin-bottom:8px;"><i data-lucide="${item.icon}"></i></div>
+              <div class="card-name">${item.name}</div>
+              <div class="card-desc">${item.desc}</div>
             </div>
           </div>
-        `;
-        area.appendChild(wrap);
-        // 뒤집기 애니메이션 시차
-        setTimeout(() => {
-          const el = document.getElementById(`ci${idx}`);
-          if (el) el.classList.add('flipped');
-        }, 150 + (idx * 150));
-      });
+        </div>
+      `;
+      return wrap;
+    }
+
+    function runInfiniteCycle() {
+      const cardInners = document.querySelectorAll('#cardsArea .card-inner');
+      if (cardInners.length === 0) return;
+
+      cardInners.forEach(ci => ci.classList.remove('flipped'));
+
+      setTimeout(() => {
+        const decks = pickDecks(3);
+        cardInners.forEach((ci, i) => {
+          if (i >= decks.length) return;
+          const deckEntry = decks[i];
+          const item = nextItem(deckEntry);
+          const cat = deckEntry.cat;
+          const front = ci.querySelector('.card-front');
+          front.style.color = `var(--accent${cat.colorIdx + 1})`;
+          front.querySelector('.cat-bar').style.background = `var(--accent${cat.colorIdx + 1})`;
+          front.querySelector('.card-cat-name').textContent = cat.name;
+          front.querySelector('.card-name').textContent = item.name;
+          front.querySelector('.card-desc').textContent = item.desc;
+          const iconEl = front.querySelector('[data-lucide]');
+          iconEl.setAttribute('data-lucide', item.icon);
+          iconEl.innerHTML = '';
+        });
+        lucide.createIcons();
+        setTimeout(() => cardInners.forEach(ci => ci.classList.add('flipped')), 100);
+        updateCounter();
+      }, 900);
+    }
+
+    function draw() {
+      if (!catDecks) buildDecks();
+
+      const area = document.getElementById('cardsArea');
+
+      area.innerHTML = '';
+      area.classList.remove('mode-draft');
+      document.getElementById('draftConfirm').style.display = 'none';
+      document.getElementById('draftCount').textContent = '';
+      draftState = { selected: new Set(), cards: [] };
+
+      if (currentMode === 'draft') {
+        area.classList.add('mode-draft');
+        document.getElementById('draftCount').textContent = '0 / 3 선택됨';
+        pickDecks(Math.min(6, catDecks.length)).forEach((deckEntry, i) => {
+          const item = nextItem(deckEntry);
+          draftState.cards[i] = { deckEntry, item };
+          const wrap = makeCardWrap(deckEntry.cat, item, i);
+          wrap.classList.add('draft-card');
+          wrap.dataset.idx = i;
+          wrap.addEventListener('click', () => toggleDraftCard(i));
+          area.appendChild(wrap);
+          setTimeout(() => document.getElementById(`ci${i}`)?.classList.add('flipped'), 150 + i * 100);
+        });
+      } else if (currentMode === 'random') {
+        area.classList.add('mode-draft');
+        pickRandom6().forEach(({ cat, item }, i) => {
+          const wrap = makeCardWrap(cat, item, i);
+          area.appendChild(wrap);
+          setTimeout(() => document.getElementById(`ci${i}`)?.classList.add('flipped'), 150 + i * 100);
+        });
+      } else if (currentMode === 'random-draft') {
+        area.classList.add('mode-draft');
+        document.getElementById('draftCount').textContent = '0 / 3 선택됨';
+        pickRandom6().forEach(({ cat, item, deckEntry }, i) => {
+          draftState.cards[i] = { deckEntry, item };
+          const wrap = makeCardWrap(cat, item, i);
+          wrap.classList.add('draft-card');
+          wrap.dataset.idx = i;
+          wrap.addEventListener('click', () => toggleDraftCard(i));
+          area.appendChild(wrap);
+          setTimeout(() => document.getElementById(`ci${i}`)?.classList.add('flipped'), 150 + i * 100);
+        });
+      } else if (currentMode === 'infinite') {
+        pickDecks(3).forEach((deckEntry, i) => {
+          const item = nextItem(deckEntry);
+          const wrap = makeCardWrap(deckEntry.cat, item, i);
+          area.appendChild(wrap);
+          setTimeout(() => document.getElementById(`ci${i}`)?.classList.add('flipped'), 150 + i * 150);
+        });
+        infiniteTimer = setInterval(runInfiniteCycle, 2500);
+      } else {
+        pickDecks(3).forEach((deckEntry, i) => {
+          const item = nextItem(deckEntry);
+          const wrap = makeCardWrap(deckEntry.cat, item, i);
+          area.appendChild(wrap);
+          setTimeout(() => document.getElementById(`ci${i}`)?.classList.add('flipped'), 150 + i * 150);
+        });
+      }
+
       lucide.createIcons();
+      updateCounter();
+    }
+
+    function toggleDraftCard(idx) {
+      const wrap = document.querySelector(`.draft-card[data-idx="${idx}"]`);
+      if (!wrap) return;
+
+      if (draftState.selected.has(idx)) {
+        draftState.selected.delete(idx);
+        wrap.classList.remove('draft-selected');
+      } else {
+        if (draftState.selected.size >= 3) return;
+        draftState.selected.add(idx);
+        wrap.classList.add('draft-selected');
+      }
+
+      const count = draftState.selected.size;
+      document.getElementById('draftCount').textContent = `${count} / 3 선택됨`;
+      document.getElementById('draftConfirm').style.display = count === 3 ? 'block' : 'none';
+    }
+
+    function confirmDraft() {
+      const area = document.getElementById('cardsArea');
+      document.querySelectorAll('.draft-card').forEach(wrap => {
+        const idx = parseInt(wrap.dataset.idx);
+        if (!draftState.selected.has(idx)) {
+          const cardData = draftState.cards[idx];
+          if (cardData?.deckEntry) cardData.deckEntry.remaining.push(cardData.item);
+          wrap.classList.add('draft-dismissed');
+          setTimeout(() => wrap.remove(), 400);
+        }
+      });
+      setTimeout(() => {
+        area.classList.remove('mode-draft');
+        document.querySelectorAll('.draft-card').forEach(w => w.classList.remove('draft-card'));
+      }, 450);
+      document.getElementById('draftConfirm').style.display = 'none';
+      document.getElementById('draftCount').textContent = '선택 완료';
     }
 
     function toggleGuide() {
@@ -528,7 +902,9 @@
     }
 
     window.onload = () => {
+      buildDecks();
       initGuide();
+      initGenreSelector();
       draw();
       lucide.createIcons();
     };
