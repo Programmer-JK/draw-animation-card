@@ -63,6 +63,13 @@
       letter-spacing: -0.02em;
     }
 
+    .draw-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
     .draw-btn {
       background: transparent;
       border: 1.5px solid var(--accent1);
@@ -71,9 +78,31 @@
       font-family: 'Black Han Sans', sans-serif;
       cursor: pointer;
       transition: 0.3s;
-      margin-bottom: 1.5rem;
       font-size: 1.1rem;
       border-radius: 4px;
+    }
+
+    .infinite-toggle {
+      background: transparent;
+      border: 1.5px solid rgba(232, 201, 122, 0.25);
+      color: rgba(232, 201, 122, 0.35);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .infinite-toggle.active {
+      border-color: var(--accent1);
+      color: var(--accent1);
+      background: rgba(232, 201, 122, 0.08);
+      box-shadow: 0 0 14px rgba(232, 201, 122, 0.2);
     }
 
     .draw-btn:active {
@@ -541,7 +570,6 @@
     <button class="mode-tab" data-mode="random" onclick="setMode('random')">랜덤 6장</button>
     <button class="mode-tab" data-mode="random-draft" onclick="setMode('random-draft')">랜덤 드래프트</button>
     <button class="mode-tab" data-mode="genre" onclick="setMode('genre')">장르</button>
-    <button class="mode-tab" data-mode="infinite" onclick="setMode('infinite')">무한</button>
   </div>
 
   <div class="genre-selector" id="genreSelector"></div>
@@ -551,7 +579,10 @@
     <button class="confirm-btn" id="draftConfirm" onclick="confirmDraft()">선택 확정</button>
   </div>
 
-  <button class="draw-btn" onclick="draw()">운명 뽑기</button>
+  <div class="draw-row">
+    <button class="draw-btn" onclick="draw()">운명 뽑기</button>
+    <button class="infinite-toggle" id="infiniteToggle" onclick="toggleInfinite()">∞</button>
+  </div>
 
   <main class="cards-area" id="cardsArea"></main>
   <div class="card-counter" id="cardCounter"></div>
@@ -637,7 +668,7 @@
     let currentMode = 'basic';
     let activeGenres = new Set();
     let draftState = { selected: new Set() };
-    let infiniteTimer = null;
+    let infiniteActive = false;
 
     function buildDecks() {
       catDecks = CATEGORIES.map(cat => ({
@@ -648,6 +679,9 @@
     }
 
     function nextItem(deckEntry) {
+      if (infiniteActive) {
+        return deckEntry.cat.items[Math.floor(Math.random() * deckEntry.cat.items.length)];
+      }
       if (deckEntry.remaining.length === 0) {
         deckEntry.remaining = [...deckEntry.cat.items].sort(() => Math.random() - 0.5);
       }
@@ -668,7 +702,6 @@
       document.querySelector(`.mode-tab[data-mode="${mode}"]`).classList.add('active');
       document.getElementById('genreSelector').style.display = mode === 'genre' ? 'flex' : 'none';
       document.getElementById('draftBar').style.display = (mode === 'draft' || mode === 'random-draft') ? 'flex' : 'none';
-      if (infiniteTimer) { clearInterval(infiniteTimer); infiniteTimer = null; }
       draw();
     }
 
@@ -741,36 +774,7 @@
       return wrap;
     }
 
-    function runInfiniteCycle() {
-      const cardInners = document.querySelectorAll('#cardsArea .card-inner');
-      if (cardInners.length === 0) return;
-
-      cardInners.forEach(ci => ci.classList.remove('flipped'));
-
-      setTimeout(() => {
-        const decks = pickDecks(3);
-        cardInners.forEach((ci, i) => {
-          if (i >= decks.length) return;
-          const deckEntry = decks[i];
-          const item = nextItem(deckEntry);
-          const cat = deckEntry.cat;
-          const front = ci.querySelector('.card-front');
-          front.style.color = `var(--accent${cat.colorIdx + 1})`;
-          front.querySelector('.cat-bar').style.background = `var(--accent${cat.colorIdx + 1})`;
-          front.querySelector('.card-cat-name').textContent = cat.name;
-          front.querySelector('.card-name').textContent = item.name;
-          front.querySelector('.card-desc').textContent = item.desc;
-          const iconEl = front.querySelector('[data-lucide]');
-          iconEl.setAttribute('data-lucide', item.icon);
-          iconEl.innerHTML = '';
-        });
-        lucide.createIcons();
-        setTimeout(() => cardInners.forEach(ci => ci.classList.add('flipped')), 100);
-        updateCounter();
-      }, 900);
-    }
-
-    function draw() {
+function draw() {
       if (!catDecks) buildDecks();
 
       const area = document.getElementById('cardsArea');
@@ -813,14 +817,6 @@
           area.appendChild(wrap);
           setTimeout(() => document.getElementById(`ci${i}`)?.classList.add('flipped'), 150 + i * 100);
         });
-      } else if (currentMode === 'infinite') {
-        pickDecks(3).forEach((deckEntry, i) => {
-          const item = nextItem(deckEntry);
-          const wrap = makeCardWrap(deckEntry.cat, item, i);
-          area.appendChild(wrap);
-          setTimeout(() => document.getElementById(`ci${i}`)?.classList.add('flipped'), 150 + i * 150);
-        });
-        infiniteTimer = setInterval(runInfiniteCycle, 2500);
       } else {
         pickDecks(3).forEach((deckEntry, i) => {
           const item = nextItem(deckEntry);
@@ -832,6 +828,12 @@
 
       lucide.createIcons();
       updateCounter();
+
+    }
+
+    function toggleInfinite() {
+      infiniteActive = !infiniteActive;
+      document.getElementById('infiniteToggle').classList.toggle('active', infiniteActive);
     }
 
     function toggleDraftCard(idx) {
