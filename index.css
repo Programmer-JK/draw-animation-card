@@ -1,0 +1,430 @@
+:root {
+  --bg: #0a0a0f;
+  --card-bg: #1a1a2e;
+  --accent1: #e8c97a;
+  --accent2: #c96a8f;
+  --accent3: #6a9fc9;
+  --accent4: #8fc96a;
+  --accent5: #c9906a;
+  --accent6: #a06ac9;
+  --text: #f0ead6;
+  --border: rgba(232, 201, 122, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 10px;
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  padding: 1.5rem 1rem 1rem;
+}
+
+header h1 {
+  font-family: 'Jua', sans-serif;
+  font-size: 2.2rem;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+header p {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-top: 5px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+/* ── 세팅 박스 ── */
+.setup-box {
+  width: 100%;
+  max-width: 420px;
+  background: #111120;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px 24px;
+  margin-bottom: 2rem;
+}
+
+.setup-box h2 {
+  font-family: 'Jua', sans-serif;
+  font-size: 1.1rem;
+  color: var(--accent1);
+  margin: 0 0 18px;
+}
+
+.setup-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.setup-input-row input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.55rem 0.9rem;
+  outline: none;
+}
+
+.setup-input-row input:focus {
+  border-color: rgba(232, 201, 122, 0.5);
+}
+
+.setup-input-row input::placeholder {
+  color: rgba(240, 234, 214, 0.3);
+}
+
+.btn-add-setup {
+  background: transparent;
+  border: 1px solid var(--accent1);
+  color: var(--accent1);
+  padding: 0.55rem 1rem;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+
+.btn-add-setup:active {
+  background: var(--accent1);
+  color: var(--bg);
+}
+
+.setup-member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 48px;
+  margin-bottom: 24px;
+}
+
+.setup-member-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.setup-member-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.setup-member-name {
+  flex: 1;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.btn-del {
+  background: transparent;
+  border: none;
+  color: rgba(240, 234, 214, 0.25);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: 0.15s;
+}
+
+.btn-del:hover { color: var(--accent2); }
+
+.setup-empty {
+  text-align: center;
+  font-size: 0.8rem;
+  opacity: 0.3;
+  padding: 10px 0;
+}
+
+/* ── 게임 설정 ── */
+.setup-divider {
+  font-family: 'Jua', sans-serif;
+  font-size: 0.8rem;
+  color: var(--accent1);
+  opacity: 0.7;
+  margin: 20px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.setup-divider::before,
+.setup-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.setup-section-label {
+  font-size: 0.75rem;
+  opacity: 0.45;
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+
+.setup-section-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.setup-section-label-row .setup-section-label {
+  margin-bottom: 0;
+}
+
+.mode-guide-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid rgba(232, 201, 122, 0.2);
+  color: rgba(232, 201, 122, 0.5);
+  padding: 0.18rem 0.55rem;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.68rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.mode-guide-btn:hover {
+  border-color: rgba(232, 201, 122, 0.5);
+  color: var(--accent1);
+}
+
+.setup-mode-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.setup-mode-chip {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(240, 234, 214, 0.4);
+  padding: 0.32rem 0.85rem;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.82rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.setup-mode-chip.active {
+  border-color: var(--accent1);
+  color: var(--accent1);
+  background: rgba(232, 201, 122, 0.1);
+}
+
+.setup-infinite-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: rgba(240, 234, 214, 0.35);
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.setup-infinite-btn.active {
+  border-color: rgba(232, 201, 122, 0.4);
+  background: rgba(232, 201, 122, 0.06);
+  color: var(--accent1);
+}
+
+.infinite-symbol {
+  font-size: 1.3rem;
+  line-height: 1;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.infinite-label {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+.infinite-desc {
+  font-size: 0.72rem;
+  opacity: 0.6;
+}
+
+.btn-start-game {
+  width: 100%;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, var(--accent1), var(--accent5));
+  border: none;
+  border-radius: 10px;
+  font-family: 'Jua', sans-serif;
+  font-size: 1.1rem;
+  color: var(--bg);
+  cursor: pointer;
+  transition: 0.2s;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.btn-start-game.ready {
+  opacity: 1;
+  pointer-events: auto;
+  box-shadow: 0 4px 20px rgba(232, 201, 122, 0.25);
+}
+
+.btn-start-game.ready:active {
+  transform: scale(0.98);
+}
+
+/* ── 모드 설명서 모달 ── */
+.mode-guide-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  padding: 20px;
+}
+
+.mode-guide-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mode-guide-book {
+  background: #1a1825;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent1);
+  border-radius: 4px 12px 12px 4px;
+  width: 100%;
+  max-width: 340px;
+  transform-origin: left center;
+  transform: perspective(900px) rotateY(-90deg);
+  transition: transform 0.42s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 8px 0 28px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.mode-guide-overlay.open .mode-guide-book {
+  transform: perspective(900px) rotateY(0deg);
+}
+
+.mode-guide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mode-guide-title {
+  font-family: 'Jua', sans-serif;
+  font-size: 1rem;
+  color: var(--accent1);
+}
+
+.mode-guide-close {
+  background: transparent;
+  border: none;
+  color: rgba(240, 234, 214, 0.4);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: 0.15s;
+}
+
+.mode-guide-close:hover { color: var(--text); }
+
+.mode-guide-body {
+  padding: 20px 16px 22px;
+}
+
+.mode-guide-item { }
+
+.mode-guide-item-head {
+  margin-bottom: 10px;
+}
+
+.mode-guide-badge {
+  font-family: 'Jua', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.mode-guide-badge.basic {
+  background: rgba(232, 201, 122, 0.12);
+  border: 1px solid rgba(232, 201, 122, 0.4);
+  color: var(--accent1);
+}
+
+.mode-guide-badge.genre {
+  background: rgba(106, 159, 201, 0.12);
+  border: 1px solid rgba(106, 159, 201, 0.4);
+  color: var(--accent3);
+}
+
+.mode-guide-desc {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: rgba(240, 234, 214, 0.75);
+  font-weight: 300;
+  margin: 0;
+  word-break: keep-all;
+}
+
+.mode-guide-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
+}
+
+@media (max-width: 480px) {
+  header h1 { font-size: 1.8rem; }
+}

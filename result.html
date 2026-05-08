@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>게임 결과</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Jua&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="result.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <div class="result-wrap">
+    <div class="trophy-icon"><i data-lucide="trophy"></i></div>
+    <h1 class="result-title">게임 결과</h1>
+    <p id="resultSub" class="result-sub"></p>
+    <div id="resultList" class="result-list"></div>
+    <div class="result-actions hidden" id="resultActions">
+      <button class="btn-score-list" onclick="openScoreModal()">
+        <i data-lucide="bar-chart-2"></i> 점수판 보기
+      </button>
+      <button class="btn-play-again" onclick="location.href='game.html'">다시 하기</button>
+      <button class="btn-home" onclick="location.href='index.html'">메인으로</button>
+    </div>
+  </div>
+
+  <!-- 점수판 모달 -->
+  <div class="modal-backdrop hidden" id="modalBackdrop" onclick="closeScoreModal()"></div>
+  <div class="score-modal hidden" id="scoreModal">
+    <div class="score-modal-header">
+      <h3>최종 점수</h3>
+      <button class="modal-close" onclick="closeScoreModal()"><i data-lucide="x"></i></button>
+    </div>
+    <div id="modalList" class="modal-list"></div>
+  </div>
+
+  <script src="result.js"></script>
+</body>
+
+</html>
