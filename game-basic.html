@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>캐릭터 카드 뽑기</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Jua&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="game.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>캐릭터 카드 뽑기</h1>
+    <p>6장의 카드로 당신의 캐릭터를 만들어보세요</p>
+  </header>
+
+  <div class="draw-row">
+    <button class="draw-btn" onclick="startGame()">카드 뽑기</button>
+    <button class="infinite-toggle" id="infiniteToggle" onclick="toggleInfinite()">∞</button>
+  </div>
+
+  <main class="cards-area mode-draft" id="cardsArea"></main>
+  <div class="card-counter" id="cardCounter"></div>
+
+  <!-- FABs -->
+  <button class="fab fab-score" onclick="toggleScoreDrawer()" title="점수판">
+    <i data-lucide="trophy"></i>
+  </button>
+  <button class="fab" onclick="toggleGuide()">?</button>
+
+  <!-- 점수판 드로어 -->
+  <div class="score-backdrop" id="scoreBackdrop" onclick="toggleScoreDrawer()"></div>
+  <div class="score-drawer" id="scoreDrawer">
+    <div class="score-drawer-header">
+      <h3>점수판</h3>
+      <button class="close-btn" onclick="toggleScoreDrawer()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="member-list" id="memberList">
+      <div class="no-members-hint">플레이어가 없어요</div>
+    </div>
+    <div class="score-actions">
+      <button class="btn-reset" onclick="resetScores()">점수 초기화</button>
+      <button class="btn-game-end" onclick="endGame()">게임 종료</button>
+    </div>
+  </div>
+
+  <!-- 도감 오버레이 -->
+  <div class="guide-overlay" id="guideOverlay">
+    <div class="guide-content">
+      <div class="guide-header">
+        <h2>전체 카드 도감</h2>
+        <button class="close-btn" onclick="toggleGuide()"><i data-lucide="x"></i></button>
+      </div>
+      <div id="guideList"></div>
+    </div>
+  </div>
+
+  <script src="game-common.js"></script>
+  <script src="game-basic.js"></script>
+</body>
+
+</html>

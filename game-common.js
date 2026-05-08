@@ -95,10 +95,10 @@ const CATEGORIES = [
   }
 ];
 
-// ── 게임 상태 ─────────────────────────────────
+// ── 공통 상태 ──────────────────────────────────
 let catDecks = null;
-let currentMode = 'basic';
 let infiniteActive = false;
+let members = [];
 
 // ── 덱 관리 ───────────────────────────────────
 function buildDecks() {
@@ -106,7 +106,6 @@ function buildDecks() {
     cat,
     remaining: [...cat.items].sort(() => Math.random() - 0.5)
   }));
-  activeGenres = new Set(CATEGORIES.map((_, i) => i));
 }
 
 function nextItem(deckEntry, usedNames) {
@@ -131,112 +130,7 @@ function updateCounter() {
   el.textContent = `남은 카드  ${rem} / ${total}`;
 }
 
-// ── 모드 ──────────────────────────────────────
-function setMode(mode) {
-  currentMode = mode;
-  document.getElementById('genreSelector').style.display = 'none';
-  draw();
-}
-
-function startGame() {
-  draw();
-}
-
-// ── 장르 모드 (클릭으로 카드 공개) ────────────
-let genreRevealState = { catCounts: new Map(), totalCards: 0 };
-
-const GENRE_CARD_ROTS = [-2.8, 1.6, -1.4, 2.4, -0.6, 1.8, -2.2, 2.0, -1.8, 1.2, -0.9, 2.6, -1.6];
-
-function initGenreSelector() {
-  const el = document.getElementById('genreSelector');
-  el.innerHTML = `
-    <div class="genre-selector-label">카테고리를 선택해 카드를 뽑으세요</div>
-    <div class="genre-btn-row">
-      ${CATEGORIES.map((cat, idx) => `
-        <button class="genre-cat-btn" data-idx="${idx}" onclick="revealGenreCard(${idx})"
-          style="border-color:var(--accent${cat.colorIdx + 1});color:var(--accent${cat.colorIdx + 1})">
-          ${cat.name}<span class="genre-btn-count" style="display:none"></span>
-        </button>
-      `).join('')}
-    </div>
-    <div class="genre-progress" id="genreProgress">0장 뽑음</div>
-    <button class="genre-reset-btn" onclick="resetGenre()">↺ 다시 시작</button>
-  `;
-}
-
-function revealGenreCard(catIdx) {
-  const prevCount = genreRevealState.catCounts.get(catIdx) || 0;
-  genreRevealState.catCounts.set(catIdx, prevCount + 1);
-  genreRevealState.totalCards++;
-
-  const btn = document.querySelector(`.genre-cat-btn[data-idx="${catIdx}"]`);
-  if (btn) {
-    btn.classList.add('used');
-    const countEl = btn.querySelector('.genre-btn-count');
-    if (countEl) { countEl.textContent = prevCount + 1; countEl.style.display = ''; }
-  }
-
-  const total = genreRevealState.totalCards;
-  const progress = document.getElementById('genreProgress');
-  if (progress) progress.textContent = `${total}장 뽑음`;
-
-  const deckEntry = catDecks[catIdx];
-  const item = nextItem(deckEntry);
-  const cardIdx = total - 1;
-
-  const area = document.getElementById('cardsArea');
-  const wrap = makeCardWrap(deckEntry.cat, item, `g${cardIdx}`);
-  wrap.classList.add('genre-card', 'entering');
-  wrap.style.setProperty('--card-rot', `${GENRE_CARD_ROTS[cardIdx % GENRE_CARD_ROTS.length]}deg`);
-
-  area.appendChild(wrap);
-  lucide.createIcons();
-  updateCounter();
-
-  setTimeout(() => {
-    document.getElementById(`cig${cardIdx}`)?.classList.add('flipped');
-  }, 50);
-
-  setTimeout(() => wrap.classList.remove('entering'), 620);
-}
-
-function resetGenre() {
-  genreRevealState = { catCounts: new Map(), totalCards: 0 };
-  document.getElementById('cardsArea').innerHTML = '';
-  document.querySelectorAll('.genre-cat-btn').forEach(b => {
-    b.classList.remove('used');
-    const countEl = b.querySelector('.genre-btn-count');
-    if (countEl) { countEl.textContent = ''; countEl.style.display = 'none'; }
-  });
-  const progress = document.getElementById('genreProgress');
-  if (progress) progress.textContent = `0장 뽑음`;
-}
-
-// ── 카드 뽑기 ─────────────────────────────────
-function pickRandom6() {
-  const catCounts = new Map();
-  const results = [];
-  const usedNames = new Set();
-  while (results.length < 6) {
-    const available = catDecks.filter((_, i) => (catCounts.get(i) || 0) < 3);
-    if (available.length === 0) break;
-    const deckEntry = available[Math.floor(Math.random() * available.length)];
-    const catIdx = catDecks.indexOf(deckEntry);
-    const item = nextItem(deckEntry, usedNames);
-    usedNames.add(item.name);
-    results.push({ cat: deckEntry.cat, item, deckEntry });
-    catCounts.set(catIdx, (catCounts.get(catIdx) || 0) + 1);
-  }
-  return results;
-}
-
-function pickDecks(count) {
-  const pool = currentMode === 'genre'
-    ? catDecks.filter((_, i) => activeGenres.has(i))
-    : catDecks;
-  return [...pool].sort(() => Math.random() - 0.5).slice(0, count);
-}
-
+// ── 카드 렌더링 ───────────────────────────────
 function makeCardWrap(cat, item, idx) {
   const wrap = document.createElement('div');
   wrap.className = 'card-wrap';
@@ -257,43 +151,11 @@ function makeCardWrap(cat, item, idx) {
   return wrap;
 }
 
-function draw() {
-  if (!catDecks) buildDecks();
-
-  const area = document.getElementById('cardsArea');
-  area.innerHTML = '';
-  area.classList.remove('mode-draft');
-
-  if (currentMode === 'genre') {
-    // 장르 모드: 카테고리 버튼 클릭으로 한 장씩 공개하여 쌓기
-    genreRevealState = { catCounts: new Map(), totalCards: 0 };
-    document.getElementById('genreSelector').style.display = 'flex';
-    document.querySelectorAll('.genre-cat-btn').forEach(c => {
-      c.classList.remove('used');
-      const countEl = c.querySelector('.genre-btn-count');
-      if (countEl) { countEl.textContent = ''; countEl.style.display = 'none'; }
-    });
-    const progress = document.getElementById('genreProgress');
-    if (progress) progress.textContent = `0장 뽑음`;
-  } else {
-    // 기본 모드: 6장 랜덤 공개
-    document.getElementById('genreSelector').style.display = 'none';
-    area.classList.add('mode-draft');
-    pickRandom6().forEach(({ cat, item }, i) => {
-      const wrap = makeCardWrap(cat, item, i);
-      area.appendChild(wrap);
-      setTimeout(() => document.getElementById(`ci${i}`)?.classList.add('flipped'), 150 + i * 100);
-    });
-    lucide.createIcons();
-    updateCounter();
-  }
-}
-
+// ── 무한 모드 ─────────────────────────────────
 function toggleInfinite() {
   infiniteActive = !infiniteActive;
   document.getElementById('infiniteToggle').classList.toggle('active', infiniteActive);
 }
-
 
 // ── 도감 ──────────────────────────────────────
 function toggleGuide() {
@@ -327,8 +189,6 @@ function initGuide() {
 }
 
 // ── 점수판 ────────────────────────────────────
-let members = [];
-
 function toggleScoreDrawer() {
   const drawer = document.getElementById('scoreDrawer');
   const backdrop = document.getElementById('scoreBackdrop');
@@ -379,31 +239,3 @@ function renderMembers() {
   }).join('');
   lucide.createIcons();
 }
-
-// ── 초기화 ────────────────────────────────────
-window.onload = () => {
-  // sessionStorage에서 설정 불러오기
-  const saved = sessionStorage.getItem('players');
-  if (saved) {
-    members = JSON.parse(saved).map(name => ({ name, score: 0 }));
-  }
-
-  const savedMode = sessionStorage.getItem('mode') || 'basic';
-  const savedInfinite = sessionStorage.getItem('infinite') === 'true';
-
-  buildDecks();
-  initGuide();
-  initGenreSelector();
-  renderMembers();
-
-  // 무한 모드 적용
-  if (savedInfinite) {
-    infiniteActive = true;
-    document.getElementById('infiniteToggle').classList.add('active');
-  }
-
-  // 모드 적용 (draw 포함)
-  setMode(savedMode);
-
-  lucide.createIcons();
-};

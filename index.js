@@ -61,9 +61,8 @@ function renderSetupMembers() {
 function startGame() {
   if (setupMembers.length === 0) return;
   sessionStorage.setItem('players', JSON.stringify(setupMembers.map(m => m.name)));
-  sessionStorage.setItem('mode', selectedMode);
   sessionStorage.setItem('infinite', String(infiniteEnabled));
-  location.href = 'game.html';
+  location.href = selectedMode === 'genre' ? 'game-genre.html' : 'game-basic.html';
 }
 
 function openModeGuide() {
