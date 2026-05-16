@@ -194,6 +194,7 @@ function toggleScoreDrawer() {
   const backdrop = document.getElementById('scoreBackdrop');
   const open = drawer.classList.toggle('open');
   backdrop.classList.toggle('active', open);
+  document.body.classList.toggle('score-open', open);
 }
 
 function addScore(idx) {

@@ -5,7 +5,11 @@ function pickRandom6() {
   const results = [];
   const usedNames = new Set();
   while (results.length < 6) {
-    const available = catDecks.filter((_, i) => (catCounts.get(i) || 0) < 3);
+    const available = catDecks.filter((_, i) => {
+      const name = catDecks[i].cat.name;
+      const max = name === '성격' ? 1 : name === '특징' ? 3 : 2;
+      return (catCounts.get(i) || 0) < max;
+    });
     if (available.length === 0) break;
     const deckEntry = available[Math.floor(Math.random() * available.length)];
     const catIdx = catDecks.indexOf(deckEntry);
@@ -41,6 +45,11 @@ window.onload = () => {
   if (savedInfinite) {
     infiniteActive = true;
     document.getElementById('infiniteToggle').classList.add('active');
+  }
+
+  if (window.innerWidth >= 768) {
+    document.getElementById('scoreDrawer').classList.add('open');
+    document.body.classList.add('score-open');
   }
 
   startGame();
