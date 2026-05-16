@@ -6,7 +6,6 @@ const CATEGORIES = [
       { name: "정장", desc: "단정한 실루엣", icon: "briefcase" },
       { name: "코트", desc: "고독한 분위기", icon: "shirt" },
       { name: "운동복", desc: "활동적인 에너지", icon: "dumbbell" },
-      { name: "수영복", desc: "여름의 추억", icon: "droplets" },
       { name: "로브", desc: "신비로운 마력", icon: "sparkles" },
       { name: "드레스", desc: "화려한 우아함", icon: "star" },
       { name: "제복", desc: "규율과 질서", icon: "award" },
@@ -99,6 +98,7 @@ const CATEGORIES = [
 let catDecks = null;
 let infiniteActive = false;
 let members = [];
+let displayRemaining = 0;
 
 // ── 덱 관리 ───────────────────────────────────
 function buildDecks() {
@@ -106,6 +106,7 @@ function buildDecks() {
     cat,
     remaining: [...cat.items].sort(() => Math.random() - 0.5)
   }));
+  displayRemaining = CATEGORIES.reduce((s, c) => s + c.items.length, 0);
 }
 
 function nextItem(deckEntry, usedNames) {
@@ -119,15 +120,15 @@ function nextItem(deckEntry, usedNames) {
   if (deckEntry.remaining.length === 0) {
     deckEntry.remaining = [...deckEntry.cat.items].sort(() => Math.random() - 0.5);
   }
+  if (displayRemaining > 0) displayRemaining--;
   return deckEntry.remaining.pop();
 }
 
 function updateCounter() {
   const el = document.getElementById('cardCounter');
   if (!el || !catDecks) return;
-  const rem = catDecks.reduce((s, d) => s + d.remaining.length, 0);
   const total = CATEGORIES.reduce((s, c) => s + c.items.length, 0);
-  el.textContent = `남은 카드  ${rem} / ${total}`;
+  el.textContent = `남은 카드  ${displayRemaining} / ${total}`;
 }
 
 // ── 카드 렌더링 ───────────────────────────────
