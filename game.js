@@ -218,7 +218,7 @@ function pickRandom6() {
   const results = [];
   const usedNames = new Set();
   while (results.length < 6) {
-    const available = catDecks.filter((_, i) => (catCounts.get(i) || 0) < 3);
+    const available = catDecks.filter((_, i) => (catCounts.get(i) || 0) < (catDecks[i].cat.name === '성격' ? 1 : 2));
     if (available.length === 0) break;
     const deckEntry = available[Math.floor(Math.random() * available.length)];
     const catIdx = catDecks.indexOf(deckEntry);
