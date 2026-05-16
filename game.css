@@ -606,6 +606,21 @@ header p {
 .c-4 { --accent-color: var(--accent5); color: var(--accent5); }
 .c-5 { --accent-color: var(--accent6); color: var(--accent6); }
 
+/* ── 점수판 토글 사이드바 (데스크톱) ── */
+@media (min-width: 768px) {
+  body.score-open {
+    padding-right: 310px;
+  }
+
+  .score-backdrop {
+    display: none !important;
+  }
+
+  .score-drawer .close-btn {
+    display: none;
+  }
+}
+
 /* ── 모바일 ── */
 @media (max-width: 480px) {
   header h1 { font-size: 1.8rem; }

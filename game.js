@@ -334,6 +334,7 @@ function toggleScoreDrawer() {
   const backdrop = document.getElementById('scoreBackdrop');
   const open = drawer.classList.toggle('open');
   backdrop.classList.toggle('active', open);
+  document.body.classList.toggle('score-open', open);
 }
 
 function addScore(idx) {
@@ -395,6 +396,12 @@ window.onload = () => {
   initGuide();
   initGenreSelector();
   renderMembers();
+
+  // 데스크톱에서 점수판 기본으로 열기
+  if (window.innerWidth >= 768) {
+    document.getElementById('scoreDrawer').classList.add('open');
+    document.body.classList.add('score-open');
+  }
 
   // 무한 모드 적용
   if (savedInfinite) {
